@@ -1,0 +1,11 @@
+def start = getCustomFieldValue("MMP Transition Start Date")
+def end = getCustomFieldValue("FI Start Date")
+if (start && end) 
+{
+ // getTime() returns time in ms
+ // The expression returns BigDecimal; we want Double
+return Math.ceil(new Double((end.getTime() - start.getTime())/(1000*60)));
+}
+else {
+ return null
+}
