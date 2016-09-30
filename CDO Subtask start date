@@ -1,0 +1,30 @@
+//Field Installation Time
+import com.atlassian.jira.component.ComponentAccessor
+import com.atlassian.jira.event.type.EventDispatchOption
+import com.atlassian.jira.ComponentManager
+import com.atlassian.jira.issue.Issue
+import com.atlassian.core.util.DateUtils
+ 
+// Get access to the required issue managers
+
+def issueManager = ComponentAccessor.getIssueManager()
+def changeHistoryManager = ComponentAccessor.getChangeHistoryManager()
+def subTaskManager = ComponentAccessor.getSubTaskManager()
+// Get the current User
+def User = ComponentAccessor.getJiraAuthenticationContext().getLoggedInUser()
+ 
+// Get the current Issue
+//def issue = issueManager.getIssueObject();
+Collection subTasks = issue.getSubTaskObjects();
+ if (subTasks.isEmpty())
+        return false;
+ else
+ {
+    for (currIssue in subTasks)
+    {
+        if ((currIssue.getSummary() == 'Complete Duplication Order'))
+          {
+		    return changeHistoryManager.getChangeItemsForField(currIssue, "status").find {it.toString == "In Progress"}?.getCreated().getTime()
+          }
+     }
+ }
